@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Cities = ({ provinces, fetchProvinceData }) => {
-  
-
   return (
     <div className="w-full">
       <div className="w-full  mb-4">
@@ -11,7 +9,7 @@ const Cities = ({ provinces, fetchProvinceData }) => {
           Provinces, Cities or Towns
         </h1>
       </div>
-      <div className=" columns-2 lg:columns-4 gap-10 mx-6 justify-start items-start">
+      <div className="columns-1 md:columns-2 lg:columns-4 gap-10 mx-6 justify-start items-start">
         {provinces.map((province) => {
           const check = province.classname.slice(-5);
           {
