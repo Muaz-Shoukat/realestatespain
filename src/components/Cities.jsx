@@ -5,7 +5,7 @@ const Cities = ({ provinces, fetchProvinceData }) => {
   return (
     <div className="w-full">
       <div className="w-full  mb-4">
-        <h1 className="text-2xl font-bold text-left">
+        <h1 className="text-lg md:text-2xl font-bold text-left">
           Provinces, Cities or Towns
         </h1>
       </div>

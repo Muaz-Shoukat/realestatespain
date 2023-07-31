@@ -15,7 +15,9 @@ const Button = (props) => {
         props.type.id === props.typeObj.id ? activetypeBtnClasses : ""
       }`}
     >
-      <h1 className="text-lg font-semibold">{props.typeObj.name}</h1>
+      <h1 className="text-sm  md:text-lg font-semibold">
+        {props.typeObj.name}
+      </h1>
     </button>
   );
 };

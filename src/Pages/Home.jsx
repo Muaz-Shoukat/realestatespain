@@ -75,7 +75,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center gap-7 mb-5 md:mb-10 min-w-[100px] max-w-[500px]">
+      <div className="flex flex-wrap justify-center items-center gap-7 mb-5 md:mb-10 min-w-[80px] max-w-[500px]">
         {types.map((x) => {
           return (
             <Button
