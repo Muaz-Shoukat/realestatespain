@@ -19,27 +19,27 @@ const Home = () => {
   const url = "https://realestate-server-cyan.vercel.app/";
 
   const fetchProvinceData = useCallback(
-    async (flag = "edium", provUrl = "/") => {
+    async (flag = "edium", provUrl = "https://www.pisos.com/") => {
       setLoading(true);
       setError(null);
       try {
-      setProvinces([]);
-      // navigate("/");
-      const response = await fetch(url, {
-        method: "post",
-        body: JSON.stringify({ flag, url: provUrl }),
-        headers: { "Content-Type": "application/json" },
-      });
-      
-      if (!response.ok) {
-        throw new Error("Unable to Fetch Data");
-      }
-      const cityData = await response.json();
-      console.log(cityData);
-      setProvinces(cityData.data);
+        setProvinces([]);
+        const response = await fetch(url, {
+          method: "post",
+          body: JSON.stringify({ flag, url: provUrl }),
+          headers: { "Content-Type": "application/json" },
+        });
+        console.log(response);
+
+        if (!response.ok) {
+          throw new Error("Unable to Fetch Data");
+        }
+        const cityData = await response.json();
+        console.log(cityData);
+        setProvinces(cityData.data);
       } catch (error) {
         setError(error);
-        console.log(error);
+        console.log("Error", error);
       }
       setLoading(false);
     },

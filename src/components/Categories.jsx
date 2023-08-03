@@ -1,4 +1,5 @@
 import React from "react";
+import Title from "./UI/Title";
 
 const Categories = (props) => {
   const catBtnClasses =
@@ -8,11 +9,7 @@ const Categories = (props) => {
 
   return (
     <div className="w-full">
-      <div className="w-full mb-4">
-        <h1 className="text-lg md:text-2xl font-bold text-left">
-          {props.title}
-        </h1>
-      </div>
+      <Title title={props.title} />
       <div className="flex flex-wrap mb-2 items-center md:justify-start justify-center text-center">
         {props.showCategories &&
           props.showCategories.map((cat) => (
