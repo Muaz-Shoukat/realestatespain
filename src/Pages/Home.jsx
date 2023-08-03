@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Categories from "../components/Categories";
 import Button from "../components/Button";
 import Cities from "../components/Cities";
-import { useNavigate } from "react-router-dom";
 import { types } from "../assets/CategoriesData";
 import Loader from "../components/Loader";
 
@@ -26,7 +25,7 @@ const Home = () => {
         setProvinces([]);
         const response = await fetch(url, {
           method: "post",
-          body: JSON.stringify({ flag, url: provUrl }),
+          body: JSON.stringify({ flag: "edium", url: provUrl }),
           headers: { "Content-Type": "application/json" },
         });
         console.log(response);
@@ -75,7 +74,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-wrap justify-center items-center gap-7 mb-5 md:mb-10 min-w-[80px] max-w-[500px]">
+      <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-3 sm:gap-7 mb-5 md:mb-10 min-w-[80px] max-w-[500px]">
         {types.map((x) => {
           return (
             <Button

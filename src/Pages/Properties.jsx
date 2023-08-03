@@ -155,7 +155,7 @@ const Properties = () => {
           className="cursor-pointer"
         >
           <img
-            className="bg-white p-[1px] w-8 sm:w-12 hover:bg-[#BF40BF] rounded-full"
+            className="bg-white p-[1px] w-8 sm:w-12 lg:hover:bg-[#BF40BF] rounded-full"
             src={NextArrow}
             alt="next"
           />

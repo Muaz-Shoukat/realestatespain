@@ -13,33 +13,20 @@ const Cities = ({ provinces, fetchProvinceData }) => {
             /* const name = province.name.replace("Pisos en ",""); */
           }
           return (
-            <div
-              key={province.href}
-              onClick={() => fetchProvinceData(check, province.href)}
-            >
-              {(check === "edium" && (
+            <div key={province.href}>
+              {(check === "-item" && (
                 <div
                   key={province.href}
-                  className="text-[#322653] w-[200px] mb-2 text-left"
+                  className="text-[#8062D6] w-[200px] mb-2 text-left"
                 >
-                  <h1 className="cursor-pointer font-semibold">
+                  <Link
+                    to={`/properties?flag=${check}&url=${province.href}`}
+                    className="cursor-pointer"
+                  >
                     {province.name}
-                  </h1>
+                  </Link>
                 </div>
               )) ||
-                (check === "-item" && (
-                  <div
-                    key={province.href}
-                    className="text-[#8062D6] w-[200px] mb-2 text-left"
-                  >
-                    <Link
-                      to={`/properties?flag=${check}&url=${province.href}`}
-                      className="cursor-pointer"
-                    >
-                      {province.name}
-                    </Link>
-                  </div>
-                )) ||
                 (check === "bitem" && (
                   <div
                     key={province.href}
@@ -53,6 +40,19 @@ const Cities = ({ provinces, fetchProvinceData }) => {
                         {province.name}
                       </span>
                     </Link>
+                  </div>
+                )) ||
+                (check === "edium" && (
+                  <div
+                    key={province.href}
+                    className="text-[#322653] w-[200px] mb-2 text-left"
+                    onClick={() => {
+                      fetchProvinceData(check, province.href);
+                    }}
+                  >
+                    <h1 className="cursor-pointer font-semibold">
+                      {province.name}
+                    </h1>
                   </div>
                 ))}
             </div>
