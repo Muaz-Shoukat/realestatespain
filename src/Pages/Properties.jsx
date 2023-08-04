@@ -35,7 +35,7 @@ const Properties = () => {
         throw new Error("Unable to Fetch Data");
       }
       const totalData = await response.json();
-
+      console.log(totalData);
       setProperties(totalData.data);
     } catch (error) {
       setIsError(error.message);
@@ -53,7 +53,7 @@ const Properties = () => {
         key={index}
         className={
           index + 1 === pageNumber
-            ? "cursor-pointer rounded-md sm:rounded-lg px-2 sm:px-3 py-[2px] sm:py-1 text-xs sm:text-base  border text-white bg-[#BF40BF] mr-1 sm:mr-2"
+            ? "cursor-pointer rounded-md sm:rounded-lg px-2 sm:px-3 py-[2px] sm:py-1 text-xs sm:text-base  border border-[#BF40BF] text-white bg-[#BF40BF] mr-1 sm:mr-2"
             : "cursor-pointer rounded-md sm:rounded-lg px-2 sm:px-3 py-[2px] sm:py-1  text-xs sm:text-base border border-[#BF40BF] mr-1 sm:mr-2 hover:bg-[#BF40BF] hover:text-white"
         }
         onClick={() => setPageNumber(pg)}
@@ -128,37 +128,52 @@ const Properties = () => {
         </div>
       )}
       {!isLoading && !isError && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map((pro, index) => (
-            <Card key={index} property={pro} />
-          ))}
-        </div>
+        <>
+          {(properties && properties.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {properties.map((pro, index) => (
+                <Card key={index} property={pro} />
+              ))}
+            </div>
+          )) || (
+            <div className="text-xl font-semibold text-[#8062D6] w-full h-[70vh] flex items-center justify-center align-middle">
+              <span className="mx-auto">
+                {pageNumber > 1
+                  ? "You have reached the end of Result"
+                  : "No Data Found"}
+              </span>
+            </div>
+          )}
+        </>
       )}
       <div className="flex flex-wrap justify-end items-center float-right mb-8">
         <button
-          onClick={() => setPageNumber((prev) => prev - 1)}
+          onClick={() => {
+            if (pageNumber > 1) {
+              setPageNumber((prev) => prev - 1);
+            }
+          }}
           disabled={pageNumber <= 1}
-          className="cursor-pointer mr-1 sm:mr-2"
+          className="mr-1 sm:mr-2 cursor-pointer w-8 p-1 sm:p-2 border-[2px] border-black sm:w-12 lg:hover:bg-[#BF40BF] rounded-full active:bg-[#BF40BF] disabled:cursor-not-allowed disabled:hidden"
         >
-          <img
-            className="bg-white w-8 sm:w-12 hover:bg-[#BF40BF] rounded-full"
-            src={BackArrow}
-            alt="next"
-          />
+          <img className="w-8" src={BackArrow} alt="next" />
         </button>
         {pgNav.length > 0 && pageNavHandler()}
         <button
+          disabled={!properties.length}
           onClick={() => {
-            setPgNav((prev) => [...prev, pgNav.length + 1]);
-            setPageNumber(() => pgNav.length + 2);
+            if (properties.length) {
+              if (pageNumber > pgNav.length) {
+                setPgNav((prev) => [...prev, pgNav.length + 1]);
+                setPageNumber(() => pgNav.length + 2);
+              } else {
+                setPageNumber(() => pgNav.length + 1);
+              }
+            }
           }}
-          className="cursor-pointer"
+          className="cursor-pointer w-8 p-1 sm:p-2 border-[2px] border-black sm:w-12 lg:hover:bg-[#BF40BF] rounded-full active:bg-[#BF40BF] disabled:cursor-not-allowed disabled:hidden"
         >
-          <img
-            className="bg-white p-[1px] w-8 sm:w-12 lg:hover:bg-[#BF40BF] rounded-full"
-            src={NextArrow}
-            alt="next"
-          />
+          <img className="" src={NextArrow} alt="next" />
         </button>
       </div>
     </div>

@@ -4,28 +4,29 @@ import Button from "../components/Button";
 import Cities from "../components/Cities";
 import { types } from "../assets/CategoriesData";
 import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [type, setType] = useState(types[0]);
-  const [provinces, setProvinces] = useState([]);
+  const [response, setResponse] = useState({});
   const [category, setCategory] = useState(
     type.categories && type.categories[0]
   );
   const [subCategory, setSubCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const url = "https://realestate-server-cyan.vercel.app/";
 
-  const fetchProvinceData = useCallback(
+  const fetchData = useCallback(
     async (flag = "edium", provUrl = "https://www.pisos.com/") => {
       setLoading(true);
       setError(null);
       try {
-        setProvinces([]);
         const response = await fetch(url, {
           method: "post",
-          body: JSON.stringify({ flag: "edium", url: provUrl }),
+          body: JSON.stringify({  flag, url: provUrl }),
           headers: { "Content-Type": "application/json" },
         });
         console.log(response);
@@ -33,9 +34,13 @@ const Home = () => {
         if (!response.ok) {
           throw new Error("Unable to Fetch Data");
         }
-        const cityData = await response.json();
-        console.log(cityData);
-        setProvinces(cityData.data);
+        const data = await response.json();
+        if(data.flag !== "edium"){
+          navigate(`/properties?url=${provUrl}`);
+        }
+        console.log(data);
+        setResponse(data);
+        
       } catch (error) {
         setError(error);
         console.log("Error", error);
@@ -46,20 +51,22 @@ const Home = () => {
   );
 
   useEffect(() => {
-    fetchProvinceData();
-  }, [fetchProvinceData]);
+    fetchData();
+  }, [fetchData]);
+  
+ 
 
   const typeHandler = (newType) => {
     setType(() => newType);
-    fetchProvinceData("edium", newType.url);
+    fetchData("edium", newType.url);
   };
   const categoryHandler = (cat) => {
     setCategory(cat);
-    fetchProvinceData("edium", cat.url);
+    fetchData("edium", cat.url);
   };
   const subCategoryHandler = (cat) => {
     setSubCategory(cat);
-    fetchProvinceData("edium", cat.url);
+    fetchData("edium", cat.url);
   };
   const resetCategoryHandler = useCallback(() => {
     setCategory((type.categories && type.categories[0]) || null);
@@ -106,7 +113,7 @@ const Home = () => {
       {error && <div>{error}</div>}
       {loading && <Loader />}
       {!loading && !error && (
-        <Cities provinces={provinces} fetchProvinceData={fetchProvinceData} />
+        <Cities provinces={response} fetchProvinceData={fetchData} />
       )}
     </div>
   );
