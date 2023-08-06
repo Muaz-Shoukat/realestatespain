@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Card from "../components/UI/Card";
 import Title from "../components/UI/Title";
 import Loader from "../components/Loader";
@@ -8,14 +8,14 @@ import NextArrow from "../assets/next.png";
 import BackArrow from "../assets/back.png";
 
 const Properties = () => {
+  const [searchParams] = useSearchParams();
+  const decodeData = decodeURIComponent(searchParams.get("url"));
+  const name = decodeData.split("-")[1];
   const [pageNumber, setPageNumber] = useState(1);
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState("");
   const [pgNav, setPgNav] = useState([]);
-
-  const [searchParams] = useSearchParams();
-  let name = searchParams.get("url").split("-")[1];
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -26,7 +26,7 @@ const Properties = () => {
         {
           method: "post",
           body: JSON.stringify({
-            url: `${searchParams.get("url")}${pageNumber}`,
+            url: `${decodeData}${pageNumber}`,
           }),
           headers: { "Content-Type": "application/json" },
         }
@@ -41,7 +41,7 @@ const Properties = () => {
       setIsError(error.message);
     }
     setIsLoading(false);
-  }, [searchParams, pageNumber]);
+  }, [decodeData, pageNumber]);
 
   useEffect(() => {
     fetchData();
@@ -114,7 +114,7 @@ const Properties = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <Title title={`Properties listed in ${name.replace("/", " ")}`} />
+        <Title title={`Properties listed in ${name.replace("/", "")}`} />
         <div className="flex w-[100px] italic font-semibold text-sm mb-4">
           ({`Page ${pageNumber}`})
         </div>

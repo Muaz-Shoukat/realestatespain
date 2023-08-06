@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Properties from "./Pages/Properties";
 import GoToTop from "./components/UI/GoToTop";
+import PropertiesDetail from "./Pages/PropertiesDetail";
 
 function App() {
   return (
@@ -9,8 +10,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/properties" element={<Properties />} />
+        <Route path="/properties/detail" element={<PropertiesDetail />} />
       </Routes>
-      <GoToTop/>
+      <GoToTop />
     </div>
   );
 }

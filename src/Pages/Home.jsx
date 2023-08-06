@@ -36,7 +36,7 @@ const Home = () => {
         }
         const data = await response.json();
         if(data.flag !== "edium"){
-          navigate(`/properties?url=${provUrl}`);
+          navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
         }
         console.log(data);
         setResponse(data);

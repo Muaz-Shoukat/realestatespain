@@ -1,5 +1,6 @@
 import React from "react";
 import NoImage from "../../assets/No IMAGE.png";
+import { Link } from "react-router-dom";
 
 const Card = ({ property }) => {
   const AttributeHandler = (attribute) => {
@@ -8,7 +9,6 @@ const Card = ({ property }) => {
         <div className="flex items-center mr-4">
           <svg
             className="mr-2 w-3 md:w-4"
-            
             viewBox="0 0 19 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,6 @@ const Card = ({ property }) => {
         <div className="flex items-center mr-4">
           <svg
             className="mr-2 w-3 md:w-4"
-            
             viewBox="0 0 17 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,11 +66,18 @@ const Card = ({ property }) => {
       );
     }
   };
-
+  // to={`/properties/detail/${encodeURIComponent(property.href)}`}
   return (
-    <div className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl">
+    <Link
+      to={`/properties/detail?url=${encodeURIComponent(property.href)}`}
+      className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl"
+    >
       <div className="relative w-full h-[200px] sm:h-[250px] overflow-hidden">
-      {property.tag && <div className="absolute text-sm md:text-base top-3 bg-[#9288F8] text-white left-3 px-2 py-1 rounded-md">{property.tag}</div>}
+        {property.tag && (
+          <div className="absolute text-sm md:text-base top-3 bg-[#9288F8] text-white left-3 px-2 py-1 rounded-md">
+            {property.tag}
+          </div>
+        )}
         <img
           className="h-full w-full object-cover transition ease-out delay-150 duration-300 hover:scale-125"
           src={property.image || NoImage}
@@ -79,7 +85,9 @@ const Card = ({ property }) => {
         />
       </div>
       <div className="px-4 py-5">
-        <div className="font-semibold text-lg md:text-xl mb-2">{property.description}</div>
+        <div className="font-semibold text-lg md:text-xl mb-2">
+          {property.description}
+        </div>
         <div className="text-base mb-2 text-gray-500">
           {property.subDescription}
         </div>
@@ -97,7 +105,7 @@ const Card = ({ property }) => {
           {property.attributeD && AttributeHandler(property.attributeD)}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
