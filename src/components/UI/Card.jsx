@@ -69,7 +69,9 @@ const Card = ({ property }) => {
   // to={`/properties/detail/${encodeURIComponent(property.href)}`}
   return (
     <Link
-      to={`/properties/detail?url=${encodeURIComponent(property.href)}`}
+      to={`/properties/detail?url=${encodeURIComponent(
+        property.href
+      )}&image=${encodeURIComponent(property.image)}`}
       className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl"
     >
       <div className="relative w-full h-[200px] sm:h-[250px] overflow-hidden">
