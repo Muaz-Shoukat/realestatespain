@@ -5,10 +5,11 @@ import Cities from "../components/Cities";
 import { types } from "../assets/CategoriesData";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
+import ErrorImage from "../assets/file.png"
 
 const Home = () => {
   const [type, setType] = useState(types[0]);
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState([]);
   const [category, setCategory] = useState(
     type.categories && type.categories[0]
   );
@@ -29,7 +30,7 @@ const Home = () => {
           body: JSON.stringify({  flag, url: provUrl }),
           headers: { "Content-Type": "application/json" },
         });
-        console.log(response);
+        
 
         if (!response.ok) {
           throw new Error("Unable to Fetch Data");
@@ -38,11 +39,11 @@ const Home = () => {
         if(data.flag !== "edium"){
           navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
         }
-        console.log(data);
+        
         setResponse(data);
         
       } catch (error) {
-        setError(error);
+        setError(error.message);
         console.log("Error", error);
       }
       setLoading(false);
@@ -110,9 +111,14 @@ const Home = () => {
           category={subCategory}
         />
       )}
-      {error && <div>{error}</div>}
+      {error && !loading && (
+        <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
+          <img className="w-20 my-4" src={ErrorImage} alt="error" />
+          {error}
+        </div>
+      )}
       {loading && <Loader />}
-      {!loading && !error && (
+      {!loading && !error &&  (
         <Cities provinces={response} fetchProvinceData={fetchData} />
       )}
     </div>

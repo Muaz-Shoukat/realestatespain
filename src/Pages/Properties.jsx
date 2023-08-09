@@ -14,12 +14,12 @@ const Properties = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState("");
+  const [isError, setIsError] = useState(null);
   const [pgNav, setPgNav] = useState([]);
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
-    setIsError("");
+    setIsError(null);
     try {
       const response = await fetch(
         "https://realestate-server-cyan.vercel.app/props",
