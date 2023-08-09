@@ -152,7 +152,7 @@ const Card = ({ property }) => {
                 visible={true}
               />
             ) : (
-              "Date"
+              "Más información"
             )}
           </button>
         )}

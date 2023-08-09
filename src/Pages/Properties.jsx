@@ -26,7 +26,7 @@ const Properties = () => {
         {
           method: "post",
           body: JSON.stringify({
-            url: `${decodeData}${pageNumber}`,
+            url: `${decodeData}fecharecientedesde-desc/${pageNumber}`,
           }),
           headers: { "Content-Type": "application/json" },
         }
