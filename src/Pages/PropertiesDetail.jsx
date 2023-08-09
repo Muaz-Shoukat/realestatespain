@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import errorImage from "../assets/file.png";
+import NoImage from "../assets/No IMAGE.png";
 
 // const data = {
 //   description: "Piso en venta en San Nicolás-La Toledana-Valle Amblés",
@@ -72,7 +73,7 @@ const PropertiesDetail = () => {
                 <div className="flex items-center justify-center mt-2">
                   <img
                 className="w-full"
-                src={decodeImage}
+                src={decodeImage === undefined?decodeImage: NoImage}
                 alt="product-img"
               />
                 </div>
