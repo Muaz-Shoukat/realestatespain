@@ -48,7 +48,7 @@ const Home = () => {
       }
       setLoading(false);
     },
-    []
+    [navigate]
   );
 
   useEffect(() => {

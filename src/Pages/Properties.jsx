@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Card from "../components/UI/Card";
 import Title from "../components/UI/Title";
 import Loader from "../components/Loader";
@@ -113,6 +113,7 @@ const Properties = () => {
 
   return (
     <div>
+   
       <div className="flex items-center justify-between">
         <Title title={`Properties listed in ${name.replace("/", "")}`} />
         <div className="flex w-[100px] italic font-semibold text-sm mb-4">
