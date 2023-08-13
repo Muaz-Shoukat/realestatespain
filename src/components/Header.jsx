@@ -23,7 +23,7 @@ const Header = () => {
     setIsError(null);
     try {
       const response = await fetch(
-        "https://realestate-server-cyan.vercel.app/csv"
+        "https://realestate-server101.cyclic.app/csv"
       );
 
       if (!response.ok) {

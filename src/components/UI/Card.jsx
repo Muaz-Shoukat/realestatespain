@@ -15,7 +15,7 @@ const Card = ({ property }) => {
     setIsError(null);
     try {
       const response = await fetch(
-        "https://realestate-server-cyan.vercel.app/date",
+        "https://realestate-server101.cyclic.app/date",
         {
           method: "POST",
           body: JSON.stringify({

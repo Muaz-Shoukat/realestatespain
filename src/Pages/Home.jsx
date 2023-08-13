@@ -18,7 +18,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const url = "https://realestate-server-cyan.vercel.app/";
+  const url = "https://realestate-server101.cyclic.app/";
 
   const fetchData = useCallback(
     async (flag = "edium", provUrl = "https://www.pisos.com/") => {

@@ -17,7 +17,7 @@ const PropertiesDetail = () => {
     setIsError("");
     try {
       const response = await fetch(
-        "https://realestate-server-cyan.vercel.app/detail",
+        "https://realestate-server101.cyclic.app/detail",
         {
           method: "post",
           body: JSON.stringify({
