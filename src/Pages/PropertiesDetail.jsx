@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import errorImage from "../assets/file.png";
@@ -16,16 +16,13 @@ const PropertiesDetail = () => {
     setIsLoading(true);
     setIsError("");
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_URL}detail`,
-        {
-          method: "post",
-          body: JSON.stringify({
-            url: `https://www.pisos.com/${decodeUrl}`,
-          }),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_URL}detail`, {
+        method: "post",
+        body: JSON.stringify({
+          url: `${import.meta.env.VITE_REQUEST_URL}${decodeUrl}`,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
       if (!response.ok) {
         throw new Error("Unable to Fetch Data");
       }

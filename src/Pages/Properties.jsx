@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Card from "../components/UI/Card";
 import Title from "../components/UI/Title";
@@ -21,16 +21,13 @@ const Properties = () => {
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_URL}props`,
-        {
-          method: "post",
-          body: JSON.stringify({
-            url: `${decodeData}fecharecientedesde-desc/${pageNumber}`,
-          }),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_URL}props`, {
+        method: "post",
+        body: JSON.stringify({
+          url: `${decodeData}${import.meta.VITE_FILTER_URL}${pageNumber}`,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
       if (!response.ok) {
         throw new Error("Unable to Fetch Data");
       }
@@ -113,7 +110,6 @@ const Properties = () => {
 
   return (
     <div>
-   
       <div className="flex items-center justify-between">
         <Title title={`Properties listed in ${name.replace("/", "")}`} />
         <div className="flex w-[100px] italic font-semibold text-sm mb-4">

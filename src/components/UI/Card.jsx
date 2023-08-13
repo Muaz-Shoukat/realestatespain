@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import NoImage from "../../assets/No IMAGE.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Circles } from "react-loader-spinner";
 
 const Card = ({ property }) => {
@@ -176,20 +176,24 @@ const Card = ({ property }) => {
 
           {data && (
             <div className="w-full text-left text-sm flex flex-col justify-start">
-              <div className="flex items-center">
-                <label className="text-gray-500 whitespace-nowrap">
-                  Fecha de cotización:
-                </label>
-                <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-                  {data.date}
+              {data.date && (
+                <div className="flex items-center">
+                  <label className="text-gray-500 whitespace-nowrap">
+                    Fecha de cotización:
+                  </label>
+                  <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                    {data.date}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                <label className="text-gray-500 ">Vendedor: </label>
-                <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-                  {data.realEstate}
+              )}
+              {data.realEstate && (
+                <div className="flex items-center">
+                  <label className="text-gray-500 ">Vendedor: </label>
+                  <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                    {data.realEstate}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

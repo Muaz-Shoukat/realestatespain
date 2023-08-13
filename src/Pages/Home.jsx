@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Categories from "../components/Categories";
 import Button from "../components/Button";
 import Cities from "../components/Cities";
@@ -19,10 +19,9 @@ const Home = () => {
   const navigate = useNavigate();
 
   const url = import.meta.env.VITE_URL;
-  
 
   const fetchData = useCallback(
-    async (flag = "edium", provUrl = "https://www.pisos.com/") => {
+    async (flag = "edium", provUrl = import.meta.env.VITE_REQUEST_URL) => {
       setLoading(true);
       setError(null);
       try {
@@ -47,7 +46,7 @@ const Home = () => {
       }
       setLoading(false);
     },
-    [navigate]
+    [navigate, url]
   );
 
   useEffect(() => {
