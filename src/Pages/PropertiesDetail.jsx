@@ -59,7 +59,7 @@ const PropertiesDetail = () => {
                 <div className="flex items-center justify-center mt-2">
                   <img
                     className="w-full"
-                    src={decodeImage  ? decodeImage : NoImage}
+                    src={decodeImage != "undefined" ? decodeImage : NoImage}
                     alt="product-img"
                   />
                 </div>
