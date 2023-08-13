@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { Circles } from "react-loader-spinner";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [csvData, setCSVData] = useState([]);
@@ -52,29 +52,36 @@ const Header = () => {
         ref={csvDataRef}
       />
       <div className="max-w-[1200px] flex justify-between items-center mx-auto px-2">
-        <div className="text-base md:text-xl font-semibold">REAL ESTATE</div>
-
-       {location.pathname === "/" && <button
-          disabled={isLoading}
-          onClick={fetchDataHandler}
-          className=" flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+        <Link
+          to="/"
+          className="text-base md:text-xl font-semibold cursor-pointer"
         >
-          {isLoading ? (
-            <Circles
-              height="24"
-              width="24"
-              color="#FF00FF"
-              ariaLabel="circles-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          ) : !isError ? (
-            "Download CSV"
-          ) : (
-            "Try Again"
-          )}
-        </button>}
+          REAL ESTATE SPAIN
+        </Link>
+
+        {location.pathname === "/" && (
+          <button
+            disabled={isLoading}
+            onClick={fetchDataHandler}
+            className=" flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+          >
+            {isLoading ? (
+              <Circles
+                height="24"
+                width="24"
+                color="#FF00FF"
+                ariaLabel="circles-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            ) : !isError ? (
+              "Download CSV"
+            ) : (
+              "Try Again"
+            )}
+          </button>
+        )}
       </div>
     </div>
   );
