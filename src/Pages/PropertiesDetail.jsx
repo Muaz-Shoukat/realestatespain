@@ -27,7 +27,7 @@ const PropertiesDetail = () => {
         throw new Error("Unable to Fetch Data");
       }
       const totalData = await response.json();
-      console.log(totalData);
+      
       setDetail(totalData.data[0]);
     } catch (error) {
       setIsError(error.message);

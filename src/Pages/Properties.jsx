@@ -24,7 +24,7 @@ const Properties = () => {
       const response = await fetch(`${import.meta.env.VITE_URL}props`, {
         method: "post",
         body: JSON.stringify({
-          url: `${decodeData}${import.meta.VITE_FILTER_URL}${pageNumber}`,
+          url: `${decodeData}${import.meta.env.VITE_FILTER_URL}${pageNumber}`,
         }),
         headers: { "Content-Type": "application/json" },
       });
@@ -32,7 +32,7 @@ const Properties = () => {
         throw new Error("Unable to Fetch Data");
       }
       const totalData = await response.json();
-      console.log(totalData);
+
       setProperties(totalData.data);
     } catch (error) {
       setIsError(error.message);

@@ -28,7 +28,7 @@ const Card = ({ property }) => {
         throw new Error("Failed to Fetch");
       }
       const data = await response.json();
-      console.log(data);
+      
       setData(data.data[0]);
     } catch (error) {
       setIsError(error.message);

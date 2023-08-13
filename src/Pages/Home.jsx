@@ -42,7 +42,7 @@ const Home = () => {
         setResponse(data);
       } catch (error) {
         setError(error.message);
-        console.log("Error", error);
+        
       }
       setLoading(false);
     },

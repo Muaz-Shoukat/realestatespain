@@ -22,16 +22,13 @@ const Header = () => {
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_URL}csv`
-      );
+      const response = await fetch(`${import.meta.env.VITE_URL}csv`);
 
       if (!response.ok) {
         throw new Error("Unable to Fetch Data");
       }
       const data = await response.json();
 
-      console.log(data.data);
       setCSVData(data.data);
       setTimeout(() => {
         csvDataRef.current.link.click();
