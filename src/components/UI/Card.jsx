@@ -102,6 +102,7 @@ const Card = ({ property }) => {
   // to={`/properties/detail/${encodeURIComponent(property.href)}`}
   return (
     <div
+      className="cursor-pointer"
       onClick={() =>
         navigate(
           `/properties/detail?url=${encodeURIComponent(
