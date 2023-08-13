@@ -22,7 +22,7 @@ const Properties = () => {
     setIsError(null);
     try {
       const response = await fetch(
-        "https://realestate-server101.cyclic.app/props",
+        `${import.meta.env.VITE_URL}props`,
         {
           method: "post",
           body: JSON.stringify({

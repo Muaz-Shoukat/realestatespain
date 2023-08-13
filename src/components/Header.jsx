@@ -23,7 +23,7 @@ const Header = () => {
     setIsError(null);
     try {
       const response = await fetch(
-        "https://realestate-server101.cyclic.app/csv"
+        `${import.meta.env.VITE_URL}csv`
       );
 
       if (!response.ok) {

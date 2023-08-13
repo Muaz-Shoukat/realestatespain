@@ -5,7 +5,7 @@ import Cities from "../components/Cities";
 import { types } from "../assets/CategoriesData";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
-import ErrorImage from "../assets/file.png"
+import ErrorImage from "../assets/file.png";
 
 const Home = () => {
   const [type, setType] = useState(types[0]);
@@ -18,7 +18,8 @@ const Home = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const url = "https://realestate-server101.cyclic.app/";
+  const url = import.meta.env.VITE_URL;
+  
 
   const fetchData = useCallback(
     async (flag = "edium", provUrl = "https://www.pisos.com/") => {
@@ -27,21 +28,19 @@ const Home = () => {
       try {
         const response = await fetch(url, {
           method: "post",
-          body: JSON.stringify({  flag, url: provUrl }),
+          body: JSON.stringify({ flag, url: provUrl }),
           headers: { "Content-Type": "application/json" },
         });
-        
 
         if (!response.ok) {
           throw new Error("Unable to Fetch Data");
         }
         const data = await response.json();
-        if(data.flag !== "edium"){
+        if (data.flag !== "edium") {
           navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
         }
-        
+
         setResponse(data);
-        
       } catch (error) {
         setError(error.message);
         console.log("Error", error);
@@ -54,8 +53,6 @@ const Home = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  
- 
 
   const typeHandler = (newType) => {
     setType(() => newType);
@@ -118,7 +115,7 @@ const Home = () => {
         </div>
       )}
       {loading && <Loader />}
-      {!loading && !error &&  (
+      {!loading && !error && (
         <Cities provinces={response} fetchProvinceData={fetchData} />
       )}
     </div>

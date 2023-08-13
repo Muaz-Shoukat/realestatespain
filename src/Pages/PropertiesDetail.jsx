@@ -17,7 +17,7 @@ const PropertiesDetail = () => {
     setIsError("");
     try {
       const response = await fetch(
-        "https://realestate-server101.cyclic.app/detail",
+        `${import.meta.env.VITE_URL}detail`,
         {
           method: "post",
           body: JSON.stringify({
