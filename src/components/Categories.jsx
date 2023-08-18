@@ -1,4 +1,3 @@
-import React from "react";
 import Title from "./UI/Title";
 
 const Categories = (props) => {
