@@ -1,23 +1,21 @@
 import Title from "./UI/Title";
-const Cities = ({ provinces, fetchProvinceData }) => {
+const Cities = ({ provinces, fetchProvinceData, website }) => {
+  console.log("provinces", provinces);
   return (
     <div className="w-full">
       <Title title="Provinces, Cities or Towns" />
       <div className=" columns-1 md:columns-2 lg:columns-4 md:gap-10 mx-3 md:mx-6 justify-start items-start">
         {provinces.data &&
-          provinces.data.map((province) => {
-            const check = province.classname.slice(-5);
-            {
-              /* const name = province.name.replace("Pisos en ",""); */
-            }
+          provinces.data.map((province, index) => {
+            const check = website === "Pisos" && province.classname.slice(-5);
             return (
               <div
-                key={province.href}
+                key={index}
                 onClick={() => {
                   fetchProvinceData(check, province.href);
                 }}
               >
-                {(check === "-item" && (
+                {((check === "-item" || province.classname === "subregion") && (
                   <div
                     key={province.href}
                     className="text-[#8062D6] w-[200px] mb-2 text-left"
@@ -30,7 +28,8 @@ const Cities = ({ provinces, fetchProvinceData }) => {
                     </h1>
                   </div>
                 )) ||
-                  (check === "bitem" && (
+                  ((check === "bitem" ||
+                    province.classname === "icon-elbow --indent") && (
                     <div
                       key={province.href}
                       className="text-[#322653] w-[200px] mb-2 text-left"
@@ -45,16 +44,26 @@ const Cities = ({ provinces, fetchProvinceData }) => {
                       </h1>
                     </div>
                   )) ||
-                  (check === "edium" && (
+                  ((check === "edium" ||
+                    province.classname === "region-name") && (
                     <div
                       key={province.href}
-                      className="text-[#322653] w-[200px] mb-2 text-left"
+                      className="text-[#974EC3] w-[200px] mb-2 text-left"
                     >
                       <h1 className="cursor-pointer font-semibold">
                         {province.name}
                       </h1>
                     </div>
-                  ))}
+                  )) || (
+                    <div
+                      key={index}
+                      className="text-black w-[200px] mb-2 text-left"
+                    >
+                      <h1 className="cursor-pointer font-medium">
+                        {province.name}
+                      </h1>
+                    </div>
+                  )}
               </div>
             );
           })}

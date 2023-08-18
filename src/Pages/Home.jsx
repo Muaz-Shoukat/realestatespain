@@ -2,17 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import Categories from "../components/Categories";
 import Button from "../components/Button";
 import Cities from "../components/Cities";
-import { types } from "../assets/CategoriesData";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import ErrorImage from "../assets/file.png";
+import Title from "../components/UI/Title";
 
 const Home = () => {
-  const [type, setType] = useState(types[0]);
+  const [data, setData] = useState([]);
+  const [chooseWebsite, setChooseWebsite] = useState([]);
+  const [type, setType] = useState({});
   const [response, setResponse] = useState([]);
-  const [category, setCategory] = useState(
-    type.categories && type.categories[0]
-  );
+  const [category, setCategory] = useState({});
   const [subCategory, setSubCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,6 +35,7 @@ const Home = () => {
           throw new Error("Unable to Fetch Data");
         }
         const data = await response.json();
+        console.log("data", data);
         if (data.flag !== "edium") {
           navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
         }
@@ -42,28 +43,69 @@ const Home = () => {
         setResponse(data);
       } catch (error) {
         setError(error.message);
-        
       }
       setLoading(false);
     },
     [navigate, url]
   );
 
-  useEffect(() => {
+  const fetchPageData = useCallback(async () => {
+    const response = await fetch("./Data.json");
+    if (!response.ok) {
+      throw Error("something went wrong");
+    }
+    const data = await response.json();
+    console.log(data);
+    setData(data);
+    setChooseWebsite(data[0]);
+    setType(data[0].type[0]);
+    setCategory(data[0].type[0].categories[0]);
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    fetchPageData();
+  }, [fetchPageData]);
+
+  const chooseSiteHandler = (webObj) => {
+    setChooseWebsite(webObj);
+    setType(webObj.type[0]);
+    setCategory(webObj.type[0].categories[0]);
+    console.log("ww", webObj);
+    if (webObj.name === "Pisos") {
+      fetchData("edium");
+    } else {
+      setResponse(webObj.type[0].categories[0]);
+    }
+  };
+
   const typeHandler = (newType) => {
+    console.log("categories",newType);
     setType(() => newType);
-    fetchData("edium", newType.url);
+    if (chooseWebsite.name === "Pisos") {
+      fetchData("edium", newType.url);
+    } else {
+      setResponse(newType.categories[0]);
+    }
   };
   const categoryHandler = (cat) => {
     setCategory(cat);
-    fetchData("edium", cat.url);
+    resetSubCategoryHandler();
+    if (chooseWebsite.name === "Pisos") {
+      fetchData("edium", cat.url);
+    } else {
+      setResponse(cat);
+    }
+    // fetchData("edium", cat.url);
   };
   const subCategoryHandler = (cat) => {
     setSubCategory(cat);
-    fetchData("edium", cat.url);
+    if (chooseWebsite.name === "Pisos") {
+      fetchData("edium", cat.url);
+    } else {
+      setResponse(cat);
+    }
+    
   };
   const resetCategoryHandler = useCallback(() => {
     setCategory((type.categories && type.categories[0]) || null);
@@ -78,20 +120,39 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center">
+      <Title title="Choose Website" />
       <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-3 sm:gap-7 mb-5 md:mb-10 min-w-[80px] max-w-[500px]">
-        {types.map((x) => {
+        {data.map((x) => {
           return (
             <Button
               typeObj={x}
-              typeHandler={typeHandler}
-              type={type}
+              typeHandler={chooseSiteHandler}
+              type={chooseWebsite}
               key={x.id}
             />
           );
         })}
       </div>
 
-      {type.categories && (
+      {chooseWebsite.type && type && (
+        <>
+          <Title title="Property Type" />
+          <div className="flex flex-wrap justify-center items-center gap-x-7 gap-y-3 sm:gap-7 mb-5 md:mb-10 min-w-[80px] max-w-[500px]">
+            {chooseWebsite.type.map((x) => {
+              return (
+                <Button
+                  typeObj={x}
+                  typeHandler={typeHandler}
+                  type={type}
+                  key={x.id}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {type && (
         <Categories
           title="Categories"
           showCategories={type.categories}
@@ -99,7 +160,7 @@ const Home = () => {
           category={category}
         />
       )}
-      {type.categories && category && (
+      {type && type.categories && category && (
         <Categories
           title="Sub Categories"
           showCategories={category.subCategories}
@@ -115,7 +176,11 @@ const Home = () => {
       )}
       {loading && <Loader />}
       {!loading && !error && (
-        <Cities provinces={response} fetchProvinceData={fetchData} />
+        <Cities
+          website={chooseWebsite.name}
+          provinces={response}
+          fetchProvinceData={fetchData}
+        />
       )}
     </div>
   );
