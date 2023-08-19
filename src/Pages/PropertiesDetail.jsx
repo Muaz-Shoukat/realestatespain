@@ -27,7 +27,7 @@ const PropertiesDetail = () => {
         throw new Error("Unable to Fetch Data");
       }
       const totalData = await response.json();
-      
+      console.log("data", totalData);
       setDetail(totalData.data[0]);
     } catch (error) {
       setIsError(error.message);
@@ -61,7 +61,7 @@ const PropertiesDetail = () => {
                   />
                 </div>
               </div>
-              <div>
+              <div className="relative">
                 <h1 className="text-3xl font-bold mb-4">
                   {detail.description}
                 </h1>
@@ -72,13 +72,23 @@ const PropertiesDetail = () => {
                   <span className="text-[#7D879C]">Listed Date:</span>
                   <h6 className="ml-2 font-semibold">{detail.date}</h6>
                 </div>
+
                 <div className="flex items-center mb-4 text-md">
                   <span className="text-[#7D879C]">Seller:</span>
                   <h6 className="ml-2 font-semibold">{detail.realEstate}</h6>
                 </div>
-                <div className="flex items-center mb-4 text-md">
-                  <span className="text-[#7D879C]">contact:</span>
-                  <h6 className="ml-2 font-semibold">{detail.number}</h6>
+                <div className="flex items-center mb-4 text-md justify-between w-full">
+                  <div className="flex items-center">
+                    <span className="text-[#7D879C]">contact:</span>
+                    <h6 className="ml-2 font-semibold">{detail.number}</h6>
+                  </div>
+                  <a
+                    target="_blank"
+                    href={`${import.meta.env.VITE_REQUEST_URL}${decodeUrl}`}
+                    className=" py-2 px-3 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+                  >
+                    Link to Url
+                  </a>
                 </div>
 
                 <div className="mb-6 text-sm">
