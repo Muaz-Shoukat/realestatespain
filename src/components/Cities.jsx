@@ -1,18 +1,39 @@
+import { useNavigate } from "react-router-dom";
 import Title from "./UI/Title";
 const Cities = ({ provinces, fetchProvinceData, website }) => {
-  console.log("provinces", provinces);
+  const navigate = useNavigate();
+
   return (
     <div className="w-full">
       <Title title="Provinces, Cities or Towns" />
       <div className=" columns-1 md:columns-2 lg:columns-4 md:gap-10 mx-3 md:mx-6 justify-start items-start">
         {provinces.data &&
           provinces.data.map((province, index) => {
-            const check = website === "Pisos" && province.classname.slice(-5);
+            const check =
+              website === "Pisos"
+                ? province.classname.slice(-5)
+                : province.classname
+                ? province.classname
+                : "default";
             return (
               <div
                 key={index}
                 onClick={() => {
-                  fetchProvinceData(check, province.href);
+                  if (province.href) {
+                    if (
+                      check === "icon-elbow --indent" ||
+                      check === "region-name" ||
+                      check === "default"
+                    ) {
+                      navigate(
+                        `/properties?url=${encodeURIComponent(
+                          province.href
+                        )}&flag=${province.classname}`
+                      );
+                    } else {
+                      province.href && fetchProvinceData(check, province.href);
+                    }
+                  }
                 }}
               >
                 {((check === "-item" || province.classname === "subregion") && (

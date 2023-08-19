@@ -19,7 +19,7 @@ const Card = ({ property }) => {
         {
           method: "POST",
           body: JSON.stringify({
-            url: `https://www.pisos.com${property.href}`,
+            url: `${import.meta.env.VITE_REQUEST_URL}${property.href}`,
           }),
           headers: { "Content-Type": "application/json" },
         }
@@ -28,7 +28,7 @@ const Card = ({ property }) => {
         throw new Error("Failed to Fetch");
       }
       const data = await response.json();
-      
+
       setData(data.data[0]);
     } catch (error) {
       setIsError(error.message);

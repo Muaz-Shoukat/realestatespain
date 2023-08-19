@@ -25,18 +25,29 @@ const Home = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(url, {
-          method: "post",
-          body: JSON.stringify({ flag, url: provUrl }),
-          headers: { "Content-Type": "application/json" },
-        });
+        let response = null;
+        if (flag === "subregion") {
+          response = await fetch(`${url}icities`, {
+            method: "post",
+            body: JSON.stringify({
+              url: `https://www.idealista.com${provUrl}`,
+            }),
+            headers: { "Content-Type": "application/json" },
+          });
+        } else {
+          response = await fetch(url, {
+            method: "post",
+            body: JSON.stringify({ flag, url: provUrl }),
+            headers: { "Content-Type": "application/json" },
+          });
+        }
 
         if (!response.ok) {
           throw new Error("Unable to Fetch Data");
         }
         const data = await response.json();
         console.log("data", data);
-        if (data.flag !== "edium") {
+        if (data.flag && data.flag !== "edium") {
           navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
         }
 
