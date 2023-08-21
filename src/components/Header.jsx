@@ -11,7 +11,7 @@ const Header = () => {
   const location = useLocation();
 
   const headers = [
-    { label: "Description", key: "Description" },
+    { label: "Location", key: "Description" },
     { label: "New Price", key: "PriceNew" },
     { label: "Old Price", key: "PriceOld" },
     { label: "Reference", key: "Reference" },

@@ -81,6 +81,9 @@ const Cities = ({ provinces, fetchProvinceData, website }) => {
                       className="text-black w-[200px] mb-2 text-left"
                     >
                       <h1 className="cursor-pointer font-medium">
+                        {province.properties && (
+                          <span className="text-[#B6B6B4]">{`${province.properties}  `}</span>
+                        )}
                         {province.name}
                       </h1>
                     </div>
