@@ -9,6 +9,7 @@ import BackArrow from "../assets/back.png";
 import IdealistaCard from "../components/UI/IdealistaCard";
 
 const Properties = () => {
+  // const [count, setCount] = useState(0);
   const [searchParams] = useSearchParams();
   const decodeData = decodeURIComponent(searchParams.get("url"));
   const flag = searchParams.get("flag");
@@ -18,12 +19,13 @@ const Properties = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
   const [pgNav, setPgNav] = useState([]);
+  let count = 0;
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setIsError(null);
     try {
-      let response = null;
+      let response = [];
       if (flag) {
         response = await fetch(`${import.meta.env.VITE_URL}iprops`, {
           method: "post",
@@ -46,18 +48,31 @@ const Properties = () => {
       if (!response.ok) {
         throw new Error("Unable to Fetch Data");
       }
-      const totalData = await response.json();
-
+      let totalData = await response.json();
+      // let totalData = {data:[]};
+      console.log("data", totalData.data);
+      console.log("count", count);
+      if (totalData.data.length === 0 && count < 2) {
+        console.log("sending Request...");
+        // setCount((prev) => prev + 1);
+        count++;
+        fetchData();
+        return;
+      }
       setProperties(totalData.data);
     } catch (error) {
       setIsError(error.message);
     }
     setIsLoading(false);
-  }, [decodeData, pageNumber, flag]);
+  }, [decodeData, flag, pageNumber, count]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // useEffect(()=>{
+  //   if()
+  // },[])
 
   const page = (pg, index) => {
     return (
@@ -127,9 +142,7 @@ const Properties = () => {
     <div>
       <div className="flex items-center justify-between">
         <Title title={`Properties listed in ${name.replace("/", "")}`} />
-        <div className="flex w-[100px] italic font-semibold text-sm mb-4">
-          ({`Page ${pageNumber}`})
-        </div>
+        <div className="flex w-[100px] italic font-semibold text-sm mb-4">{`Page ${pageNumber}`}</div>
       </div>
       <div className="mb-8 mt-2 h-[2px] bg-[#8062D6]" />
       {isLoading && <Loader />}
@@ -137,6 +150,12 @@ const Properties = () => {
         <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
           <img className="w-20 my-4" src={errorImage} alt="error" />
           {isError}
+          <button
+            onClick={fetchData}
+            className=" flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+          >
+            REFRESH
+          </button>
         </div>
       )}
       {!isLoading && !isError && (
@@ -154,7 +173,7 @@ const Properties = () => {
           )) || (
             <div className="text-xl font-semibold text-[#8062D6] w-full h-[70vh] flex items-center justify-center align-middle">
               <span className="mx-auto">
-                {pageNumber > 1 ? (
+                {pageNumber > 1 && !flag ? (
                   "You have reached the end of Result"
                 ) : (
                   <button
