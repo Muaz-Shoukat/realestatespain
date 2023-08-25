@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorImage from "../assets/file.png";
 import Title from "../components/UI/Title";
 import Data from "../assets/Data";
+import Refresh from "../components/UI/Refresh";
 
 const Home = () => {
   const [chooseWebsite, setChooseWebsite] = useState(Data[0]);
@@ -30,7 +31,7 @@ const Home = () => {
           response = await fetch(`${url}icities`, {
             method: "post",
             body: JSON.stringify({
-              url: `https://www.idealista.com${provUrl}`,
+              url: `${import.meta.env.VITE_IDEALISTA_URL}${provUrl}`,
             }),
             headers: { "Content-Type": "application/json" },
           });
@@ -164,20 +165,26 @@ const Home = () => {
           category={subCategory}
         />
       )}
-      {error && !loading && (
-        <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
-          <img className="w-20 my-4" src={ErrorImage} alt="error" />
-          {error}
-        </div>
-      )}
-      {loading && <Loader />}
-      {!loading && !error && (
-        <Cities
-          website={chooseWebsite.name}
-          provinces={response}
-          fetchProvinceData={fetchData}
-        />
-      )}
+      <Title title="Provinces, Cities or Towns" />
+      <div className="w-full flex items-center justify-center">
+        {error && !loading && (
+          <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
+            <img className="w-20 my-4" src={ErrorImage} alt="error" />
+            {error}
+          </div>
+        )}
+
+        {loading && <Loader />}
+        {!loading &&
+          !error &&
+          ((response.data && response.data.length > 0 && (
+            <Cities
+              website={chooseWebsite.name}
+              provinces={response}
+              fetchProvinceData={fetchData}
+            />
+          )) || <Refresh onClickHandler={fetchData} />)}
+      </div>
     </div>
   );
 };

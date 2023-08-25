@@ -8,7 +8,7 @@ const IdealistaCard = ({ property }) => {
         <div className="relative w-full h-[200px] sm:h-[250px] overflow-hidden">
           <img
             className="h-full w-full object-cover transition ease-out delay-150 duration-300 hover:scale-125"
-            src={NoImage}
+            src={property.image ? property.image : NoImage}
             alt="img"
           />
         </div>

@@ -7,6 +7,7 @@ import errorImage from "../assets/file.png";
 import NextArrow from "../assets/next.png";
 import BackArrow from "../assets/back.png";
 import IdealistaCard from "../components/UI/IdealistaCard";
+import Refresh from "../components/UI/Refresh";
 
 const Properties = () => {
   // const [count, setCount] = useState(0);
@@ -150,12 +151,7 @@ const Properties = () => {
         <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
           <img className="w-20 my-4" src={errorImage} alt="error" />
           {isError}
-          <button
-            onClick={fetchData}
-            className=" flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
-          >
-            REFRESH
-          </button>
+          <Refresh onClickHandler={fetchData} />
         </div>
       )}
       {!isLoading && !isError && (
@@ -176,12 +172,7 @@ const Properties = () => {
                 {pageNumber > 1 && !flag ? (
                   "You have reached the end of Result"
                 ) : (
-                  <button
-                    onClick={fetchData}
-                    className=" flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
-                  >
-                    REFRESH
-                  </button>
+                  <Refresh onClickHandler={fetchData} />
                 )}
               </span>
             </div>
