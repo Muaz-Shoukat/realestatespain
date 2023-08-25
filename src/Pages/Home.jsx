@@ -17,6 +17,10 @@ const Home = () => {
   const [subCategory, setSubCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [bCheck, setbCheck] = useState("edium");
+  const [bProvinceHref, setbProvinceHref] = useState(
+    import.meta.env.VITE_REQUEST_URL
+  );
   const navigate = useNavigate();
 
   const url = import.meta.env.VITE_URL;
@@ -25,6 +29,9 @@ const Home = () => {
     async (flag = "edium", provUrl = import.meta.env.VITE_REQUEST_URL) => {
       setLoading(true);
       setError(null);
+      setbCheck(flag);
+      setbProvinceHref(provUrl);
+      console.log(flag, provUrl);
       try {
         let response = null;
         if (flag === "subregion") {
@@ -175,15 +182,20 @@ const Home = () => {
         )}
 
         {loading && <Loader />}
-        {!loading &&
-          !error &&
-          ((response.data && response.data.length > 0 && (
-            <Cities
-              website={chooseWebsite.name}
-              provinces={response}
-              fetchProvinceData={fetchData}
-            />
-          )) || <Refresh onClickHandler={fetchData} />)}
+        {!loading && !error && response.data && (
+          <Cities
+            website={chooseWebsite.name}
+            provinces={response}
+            fetchProvinceData={fetchData}
+          />
+        )}
+        {response.data && response.data.length === 0 && (
+          <Refresh
+            onClickHandler={fetchData}
+            check={bCheck}
+            province={bProvinceHref}
+          />
+        )}
       </div>
     </div>
   );
