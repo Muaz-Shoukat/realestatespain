@@ -65,7 +65,7 @@ const Home = () => {
       }
       setLoading(false);
     },
-    [navigate, url]
+    [navigate, url, bCheck, bProvinceHref]
   );
 
   useEffect(() => {
@@ -176,34 +176,34 @@ const Home = () => {
         />
       )}
       <Title title="Provinces, Cities or Towns" />
-      <div className="w-full">
-        {error && !loading && (
-          <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
-            {error}
-            <Refresh
-              onClickHandler={fetchData}
-              check={bCheck}
-              province={bProvinceHref}
-            />
-          </div>
-        )}
 
-        {loading && <Loader />}
-        {!loading && !error && response.data && (
-          <Cities
-            website={chooseWebsite.name}
-            provinces={response}
-            fetchProvinceData={fetchData}
-          />
-        )}
-        {response.data && response.data.length === 0 && (
+      {error && !loading && (
+        <div className="flex flex-col items-center justify-center text-base md:text-xl font-semibold text-red-500">
+          <div className="my-2">{error}</div>
           <Refresh
             onClickHandler={fetchData}
             check={bCheck}
             province={bProvinceHref}
           />
-        )}
-      </div>
+        </div>
+      )}
+
+      {loading && <Loader />}
+      {!loading && !error && response.data && (
+        <Cities
+          website={chooseWebsite.name}
+          provinces={response}
+          fetchProvinceData={fetchData}
+        />
+      )}
+
+      {(response.data && response.data.length === 0) && (
+        <Refresh
+          onClickHandler={fetchData}
+          check={bCheck}
+          province={bProvinceHref}
+        />
+      )}
     </div>
   );
 };

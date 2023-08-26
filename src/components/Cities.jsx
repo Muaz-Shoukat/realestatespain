@@ -3,7 +3,7 @@ const Cities = ({ provinces, fetchProvinceData, website }) => {
   const navigate = useNavigate();
 
   return (
-    <div className=" columns-1 md:columns-2 lg:columns-4 md:gap-10 mx-3 md:mx-6 justify-start items-start">
+    <div className="w-full columns-1 md:columns-2 lg:columns-4 md:gap-10 mx-3 md:mx-6 justify-start items-start">
       {provinces.data &&  (
         provinces.data.map((province, index) => {
           const check =
