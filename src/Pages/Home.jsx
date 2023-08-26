@@ -26,7 +26,7 @@ const Home = () => {
   const url = import.meta.env.VITE_URL;
 
   const fetchData = useCallback(
-    async (flag = "edium", provUrl = import.meta.env.VITE_REQUEST_URL) => {
+    async (flag = bCheck, provUrl = bProvinceHref) => {
       setLoading(true);
       setError(null);
       setbCheck(flag);
@@ -73,6 +73,7 @@ const Home = () => {
   }, [fetchData]);
 
   const chooseSiteHandler = (webObj) => {
+    setError(null);
     setChooseWebsite(webObj);
     setType(webObj.type[0]);
     setCategory(webObj.type[0].categories[0]);
@@ -85,7 +86,7 @@ const Home = () => {
   };
 
   const typeHandler = (newType) => {
-    console.log("categories", newType);
+    setError(null);
     setType(() => newType);
     if (chooseWebsite.name === "Pisos") {
       fetchData("edium", newType.url);
@@ -94,6 +95,7 @@ const Home = () => {
     }
   };
   const categoryHandler = (cat) => {
+    setError(null);
     setCategory(cat);
     resetSubCategoryHandler();
     if (chooseWebsite.name === "Pisos") {
@@ -104,6 +106,7 @@ const Home = () => {
     // fetchData("edium", cat.url);
   };
   const subCategoryHandler = (cat) => {
+    setError(null);
     setSubCategory(cat);
     if (chooseWebsite.name === "Pisos") {
       fetchData("edium", cat.url);
@@ -173,11 +176,15 @@ const Home = () => {
         />
       )}
       <Title title="Provinces, Cities or Towns" />
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full">
         {error && !loading && (
           <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
-            <img className="w-20 my-4" src={ErrorImage} alt="error" />
             {error}
+            <Refresh
+              onClickHandler={fetchData}
+              check={bCheck}
+              province={bProvinceHref}
+            />
           </div>
         )}
 
