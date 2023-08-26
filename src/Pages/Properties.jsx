@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import Card from "../components/UI/Card";
 import Title from "../components/UI/Title";
 import Loader from "../components/Loader";
-import errorImage from "../assets/file.png";
 import NextArrow from "../assets/next.png";
 import BackArrow from "../assets/back.png";
 import IdealistaCard from "../components/UI/IdealistaCard";
@@ -149,7 +148,6 @@ const Properties = () => {
       {isLoading && <Loader />}
       {isError && !isLoading && (
         <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
-          <img className="w-20 my-4" src={errorImage} alt="error" />
           {isError}
           <Refresh onClickHandler={fetchData} />
         </div>

@@ -4,7 +4,6 @@ import Button from "../components/Button";
 import Cities from "../components/Cities";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
-import ErrorImage from "../assets/file.png";
 import Title from "../components/UI/Title";
 import Data from "../assets/Data";
 import Refresh from "../components/UI/Refresh";

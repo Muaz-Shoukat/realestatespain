@@ -84,6 +84,7 @@ const PropertiesDetail = () => {
                   </div>
                   <a
                     target="_blank"
+                    rel="noopener noreferrer"
                     href={`${import.meta.env.VITE_REQUEST_URL}${decodeUrl}`}
                     className=" py-2 px-3 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
                   >
