@@ -11,7 +11,7 @@ import Refresh from "../components/UI/Refresh";
 const Home = () => {
   const [chooseWebsite, setChooseWebsite] = useState(Data[0]);
   const [type, setType] = useState(Data[0].type[0]);
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState([]);
   const [category, setCategory] = useState(Data[0].type[0].categories[0]);
   const [subCategory, setSubCategory] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,50 +24,51 @@ const Home = () => {
 
   const url = import.meta.env.VITE_URL;
 
-  const fetchData = useCallback(
-    async (flag = bCheck, provUrl = bProvinceHref) => {
-      setLoading(true);
-      setError(null);
-      setbCheck(flag);
-      setbProvinceHref(provUrl);
-      console.log(flag, provUrl);
-      try {
-        let newResponse = null;
-        if (flag === "subregion") {
-          newResponse = await fetch(`${url}icities`, {
-            method: "post",
-            body: JSON.stringify({
-              url: `${import.meta.env.VITE_IDEALISTA_URL}${provUrl}`,
-            }),
-            headers: { "Content-Type": "application/json" },
-          });
-        } else {
-          newResponse = await fetch(url, {
-            method: "post",
-            body: JSON.stringify({ flag, url: provUrl }),
-            headers: { "Content-Type": "application/json" },
-          });
-        }
+  const parameterHandler = (check,provinceHref)=>{
+    setbCheck(check);
+    setbProvinceHref(provinceHref);
+  }
 
-        if (!newResponse.ok) {
-          throw new Error("Unable to Fetch Data");
-        }
-        const data = await newResponse.json();
-        console.log("data", data);
-        if (data.flag && data.flag !== "edium") {
-          navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
-        }
-
-        setResponse(data);
-      } catch (error) {
-        setError(error.message);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    console.log("Here in Request...");
+    try {
+      let newResponse = null;
+      if (bCheck === "subregion") {
+        newResponse = await fetch(`${url}icities`, {
+          method: "post",
+          body: JSON.stringify({
+            url: `${import.meta.env.VITE_IDEALISTA_URL}${bProvinceHref}`,
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+      } else {
+        newResponse = await fetch(url, {
+          method: "post",
+          body: JSON.stringify({ bCheck, url: bProvinceHref }),
+          headers: { "Content-Type": "application/json" },
+        });
       }
-      setLoading(false);
-    },
-    [navigate, url, bCheck, bProvinceHref]
-  );
+
+      if (!newResponse.ok) {
+        throw new Error("Unable to Fetch Data");
+      }
+      const data = await newResponse.json();
+      console.log("data", data);
+      if (data.flag && data.flag !== "edium") {
+        navigate(`/properties?url=${encodeURIComponent(bProvinceHref)}`);
+      }
+
+      setResponse(data);
+    } catch (error) {
+      setError(error.message);
+    }
+    setLoading(false);
+  }, [navigate,url,bCheck,bProvinceHref]);
 
   useEffect(() => {
+    console.log("Here in First useeffect");
     fetchData();
   }, [fetchData]);
 
@@ -121,6 +122,7 @@ const Home = () => {
     setSubCategory(null);
   };
   useEffect(() => {
+    console.log("Here in second useeffect");
     resetCategoryHandler();
   }, [resetCategoryHandler]);
 
@@ -188,11 +190,12 @@ const Home = () => {
       )}
 
       {loading && <Loader />}
-      {!loading && !error && response.data && (
+      {!loading && !error && response.data && response.data.length > 0 && (
         <Cities
           website={chooseWebsite.name}
           provinces={response}
           fetchProvinceData={fetchData}
+          parameterHandler={parameterHandler}
         />
       )}
 

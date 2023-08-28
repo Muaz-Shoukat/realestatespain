@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
-const Cities = ({ provinces, fetchProvinceData, website }) => {
+const Cities = ({
+  provinces,
+  fetchProvinceData,
+  website,
+  parameterHandler,
+}) => {
   const navigate = useNavigate();
 
   return (
     <div className="w-full columns-1 md:columns-2 lg:columns-4 md:gap-10 mx-3 md:mx-6 justify-start items-start">
-      {provinces.data &&  (
+      {provinces.data &&
         provinces.data.map((province, index) => {
           const check =
             website === "Pisos"
@@ -28,7 +33,7 @@ const Cities = ({ provinces, fetchProvinceData, website }) => {
                       )}&flag=${province.classname}`
                     );
                   } else {
-                    province.href && fetchProvinceData(check, province.href);
+                    parameterHandler(check, province.href);
                   }
                 }
               }}
@@ -87,8 +92,7 @@ const Cities = ({ provinces, fetchProvinceData, website }) => {
                 )}
             </div>
           );
-        })
-      )}
+        })}
     </div>
   );
 };
