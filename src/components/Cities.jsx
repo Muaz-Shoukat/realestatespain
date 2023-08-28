@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 const Cities = ({
   provinces,
-  fetchProvinceData,
   website,
   parameterHandler,
 }) => {

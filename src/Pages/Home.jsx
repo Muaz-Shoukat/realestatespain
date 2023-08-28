@@ -24,15 +24,15 @@ const Home = () => {
 
   const url = import.meta.env.VITE_URL;
 
-  const parameterHandler = (check,provinceHref)=>{
+  const parameterHandler = (check, provinceHref) => {
     setbCheck(check);
     setbProvinceHref(provinceHref);
-  }
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
-    console.log("Here in Request...");
+    console.log(bCheck, bProvinceHref);
     try {
       let newResponse = null;
       if (bCheck === "subregion") {
@@ -65,7 +65,7 @@ const Home = () => {
       setError(error.message);
     }
     setLoading(false);
-  }, [navigate,url,bCheck,bProvinceHref]);
+  }, [navigate, url, bCheck, bProvinceHref]);
 
   useEffect(() => {
     console.log("Here in First useeffect");
@@ -73,23 +73,25 @@ const Home = () => {
   }, [fetchData]);
 
   const chooseSiteHandler = (webObj) => {
+    setResponse([]);
     setError(null);
     setChooseWebsite(webObj);
     setType(webObj.type[0]);
     setCategory(webObj.type[0].categories[0]);
     console.log("ww", webObj);
     if (webObj.name === "Pisos") {
-      fetchData("edium", import.meta.env.VITE_REQUEST_URL);
+      parameterHandler("edium", import.meta.env.VITE_REQUEST_URL);
     } else {
       setResponse(webObj.type[0].categories[0]);
     }
   };
 
   const typeHandler = (newType) => {
+    
     setError(null);
     setType(() => newType);
     if (chooseWebsite.name === "Pisos") {
-      fetchData("edium", newType.url);
+      parameterHandler("edium", newType.url);
     } else {
       setResponse(newType.categories[0]);
     }
@@ -99,17 +101,17 @@ const Home = () => {
     setCategory(cat);
     resetSubCategoryHandler();
     if (chooseWebsite.name === "Pisos") {
-      fetchData("edium", cat.url);
+      parameterHandler("edium", cat.url);
     } else {
       setResponse(cat);
     }
-    // fetchData("edium", cat.url);
+    // parameterHandler("edium", cat.url);
   };
   const subCategoryHandler = (cat) => {
     setError(null);
     setSubCategory(cat);
     if (chooseWebsite.name === "Pisos") {
-      fetchData("edium", cat.url);
+      parameterHandler("edium", cat.url);
     } else {
       setResponse(cat);
     }
@@ -181,11 +183,7 @@ const Home = () => {
       {error && !loading && (
         <div className="flex flex-col items-center justify-center text-base md:text-xl font-semibold text-red-500">
           <div className="my-2">{error}</div>
-          <Refresh
-            onClickHandler={fetchData}
-            check={bCheck}
-            province={bProvinceHref}
-          />
+          <Refresh onClickHandler={fetchData} />
         </div>
       )}
 
@@ -194,17 +192,12 @@ const Home = () => {
         <Cities
           website={chooseWebsite.name}
           provinces={response}
-          fetchProvinceData={fetchData}
           parameterHandler={parameterHandler}
         />
       )}
 
       {response.data && response.data.length === 0 && !error && (
-        <Refresh
-          onClickHandler={fetchData}
-          check={bCheck}
-          province={bProvinceHref}
-        />
+        <Refresh onClickHandler={fetchData} />
       )}
     </div>
   );

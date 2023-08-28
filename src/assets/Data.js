@@ -69,7 +69,7 @@ export default [
       {
         id: 2,
         name: "RENT",
-        buyurl: "https://www.pisos.com/alquiler_viviendas/#provincias",
+        url: "https://www.pisos.com/alquiler_viviendas/#provincias",
         categories: [
           {
             id: 1,
