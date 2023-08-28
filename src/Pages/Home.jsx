@@ -11,7 +11,7 @@ import Refresh from "../components/UI/Refresh";
 const Home = () => {
   const [chooseWebsite, setChooseWebsite] = useState(Data[0]);
   const [type, setType] = useState(Data[0].type[0]);
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState({});
   const [category, setCategory] = useState(Data[0].type[0].categories[0]);
   const [subCategory, setSubCategory] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,9 +32,9 @@ const Home = () => {
       setbProvinceHref(provUrl);
       console.log(flag, provUrl);
       try {
-        let response = null;
+        let newResponse = null;
         if (flag === "subregion") {
-          response = await fetch(`${url}icities`, {
+          newResponse = await fetch(`${url}icities`, {
             method: "post",
             body: JSON.stringify({
               url: `${import.meta.env.VITE_IDEALISTA_URL}${provUrl}`,
@@ -42,17 +42,17 @@ const Home = () => {
             headers: { "Content-Type": "application/json" },
           });
         } else {
-          response = await fetch(url, {
+          newResponse = await fetch(url, {
             method: "post",
             body: JSON.stringify({ flag, url: provUrl }),
             headers: { "Content-Type": "application/json" },
           });
         }
 
-        if (!response.ok) {
+        if (!newResponse.ok) {
           throw new Error("Unable to Fetch Data");
         }
-        const data = await response.json();
+        const data = await newResponse.json();
         console.log("data", data);
         if (data.flag && data.flag !== "edium") {
           navigate(`/properties?url=${encodeURIComponent(provUrl)}`);
@@ -78,7 +78,7 @@ const Home = () => {
     setCategory(webObj.type[0].categories[0]);
     console.log("ww", webObj);
     if (webObj.name === "Pisos") {
-      fetchData("edium");
+      fetchData("edium", import.meta.env.VITE_REQUEST_URL);
     } else {
       setResponse(webObj.type[0].categories[0]);
     }
@@ -196,7 +196,7 @@ const Home = () => {
         />
       )}
 
-      {(response.data && response.data.length === 0) && (
+      {response.data && response.data.length === 0 && !error && (
         <Refresh
           onClickHandler={fetchData}
           check={bCheck}
