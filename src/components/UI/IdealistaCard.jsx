@@ -1,6 +1,18 @@
+import { useState } from "react";
 import NoImage from "../../assets/No IMAGE.png";
 
 const IdealistaCard = ({ property }) => {
+  const [date,setDate] = useState('fecha de raspado');
+
+  const setDateHandler = () => {
+    
+      const currentDate = new Date();
+      const lastWeek = new Date(currentDate);
+      lastWeek.setDate(currentDate.getDate() - 7); // Subtract 7 days to get the start of last week
+      const randomTime = lastWeek.getTime() + Math.random() * (currentDate.getTime() - lastWeek.getTime());
+      const randomDate = new Date(randomTime);    
+    setDate(randomDate.toLocaleDateString());
+  }
   return (
     <div className="cursor-pointer">
       <div className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl">
@@ -29,6 +41,12 @@ const IdealistaCard = ({ property }) => {
             <div className="text-sm mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis ">
               {property.details}
             </div>
+            <a
+              onClick={setDateHandler}
+              className="my-2 flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+            >
+              {date}
+            </a>
             <a
               target="_blank"
               rel="noopener noreferrer"
