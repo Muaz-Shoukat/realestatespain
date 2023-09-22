@@ -1,30 +1,35 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import NoImage from "../../assets/No IMAGE.png";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Circles } from "react-loader-spinner";
 
 const Card = ({ property }) => {
-  const [date, setDate] = useState("");
+  const navigate = useNavigate();
+  const [data, setData] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  const fetchDateHandler = async () => {
+  const fetchDateHandler = async (e) => {
+    e.stopPropagation();
     setIsLoading(true);
     setIsError(null);
     try {
       const response = await fetch(
-        "https://realestate-server-cyan.vercel.app/date",
+        "https://realestate-server101.cyclic.app/date",
         {
           method: "POST",
           body: JSON.stringify({
-            url: `https://www.pisos.com${property.href}`,
+            url: `${import.meta.env.VITE_REQUEST_URL}${property.href}`,
           }),
           headers: { "Content-Type": "application/json" },
         }
       );
+      if (!response.ok) {
+        throw new Error("Failed to Fetch");
+      }
       const data = await response.json();
-      console.log(data);
-      setDate(data.data[0].date);
+
+      setData(data.data[0]);
     } catch (error) {
       setIsError(error.message);
     }
@@ -96,12 +101,17 @@ const Card = ({ property }) => {
   };
   // to={`/properties/detail/${encodeURIComponent(property.href)}`}
   return (
-    <div className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl">
-      <Link
-        to={`/properties/detail?url=${encodeURIComponent(
-          property.href
-        )}&image=${encodeURIComponent(property.image)}`}
-      >
+    <div
+      className="cursor-pointer"
+      onClick={() =>
+        navigate(
+          `/properties/detail?url=${encodeURIComponent(
+            property.href
+          )}&image=${encodeURIComponent(property.image)}`
+        )
+      }
+    >
+      <div className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl">
         <div className="relative w-full h-[200px] sm:h-[250px] overflow-hidden">
           {property.tag && (
             <div className="absolute text-sm md:text-base top-3 bg-[#9288F8] text-white left-3 px-2 py-1 rounded-md">
@@ -114,56 +124,79 @@ const Card = ({ property }) => {
             alt="img"
           />
         </div>
-      </Link>
-      <div className="px-4 py-5">
-        <div className="font-semibold text-lg md:text-xl mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
-          {property.description}
-        </div>
-        <div className="text-base mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-          {property.subDescription}
-        </div>
-        <div className="text-[#8062D6] font-semibold text-base mb-2">
-          {property.price}
-        </div>
-        <div className="text-sm mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis ">
-          {property.punchLine}
-        </div>
-        <div className="text-sm text-gray-500 mb-3">{property.address}</div>
-        <div className="flex flex-wrap items-center text-gray-500 mb-3">
-          {property.attributeA && AttributeHandler(property.attributeA)}
-          {property.attributeB && AttributeHandler(property.attributeB)}
-          {property.attributeC && AttributeHandler(property.attributeC)}
-          {property.attributeD && AttributeHandler(property.attributeD)}
-        </div>
-        {!date && (
-          <button
-            disabled={isLoading}
-            onClick={fetchDateHandler}
-            className="flex justify-center items-center py-2 w-full bg-[#8062D6] text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
-          >
-            {isLoading ? (
-              <Circles
-                height="24"
-                width="24"
-                color="#FF00FF"
-                ariaLabel="circles-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            ) : (
-              "Date"
-            )}
-          </button>
-        )}
-        {date && (
-          <div
-            onClick={fetchDateHandler}
-            className="flex justify-center items-center py-2 w-full text-base font-semibold"
-          >
-            {date}
+
+        <div className="px-4 py-5">
+          <div className="font-semibold text-lg md:text-xl mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+            {property.description}
           </div>
-        )}
+          <div className="text-base mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+            {property.subDescription}
+          </div>
+          <div className="text-[#8062D6] font-semibold text-base mb-2">
+            {property.price}
+          </div>
+          <div className="text-sm mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis ">
+            {property.punchLine}
+          </div>
+          <div className="text-sm text-gray-500 mb-3">{property.address}</div>
+          <div className="flex flex-wrap items-center text-gray-500 mb-3">
+            {property.attributeA && AttributeHandler(property.attributeA)}
+            {property.attributeB && AttributeHandler(property.attributeB)}
+            {property.attributeC && AttributeHandler(property.attributeC)}
+            {property.attributeD && AttributeHandler(property.attributeD)}
+          </div>
+          {!isLoading && isError && (
+            <div className="text-sm text-red-500 text-center mb-1">
+              {isError}
+            </div>
+          )}
+          {!data && (
+            <button
+              disabled={isLoading}
+              onClick={fetchDateHandler}
+              className="flex justify-center items-center py-2 w-full bg-[#8062D6] text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
+            >
+              {isLoading ? (
+                <Circles
+                  height="24"
+                  width="24"
+                  color="#FF00FF"
+                  ariaLabel="circles-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              ) : !isError ? (
+                "Más información"
+              ) : (
+                "Try Again"
+              )}
+            </button>
+          )}
+
+          {data && (
+            <div className="w-full text-left text-sm flex flex-col justify-start">
+              {data.date && (
+                <div className="flex items-center">
+                  <label className="text-gray-500 whitespace-nowrap">
+                    Fecha de cotización:
+                  </label>
+                  <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                    {data.date}
+                  </div>
+                </div>
+              )}
+              {data.realEstate && (
+                <div className="flex items-center">
+                  <label className="text-gray-500 ">Vendedor: </label>
+                  <div className="py-2 mx-2 w-full text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                    {data.realEstate}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

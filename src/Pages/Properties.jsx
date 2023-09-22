@@ -1,51 +1,78 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Card from "../components/UI/Card";
 import Title from "../components/UI/Title";
 import Loader from "../components/Loader";
-import errorImage from "../assets/file.png";
 import NextArrow from "../assets/next.png";
 import BackArrow from "../assets/back.png";
+import IdealistaCard from "../components/UI/IdealistaCard";
+import Refresh from "../components/UI/Refresh";
 
 const Properties = () => {
+  // const [count, setCount] = useState(0);
   const [searchParams] = useSearchParams();
   const decodeData = decodeURIComponent(searchParams.get("url"));
+  const flag = searchParams.get("flag");
   const name = decodeData.split("-")[1];
   const [pageNumber, setPageNumber] = useState(1);
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
   const [pgNav, setPgNav] = useState([]);
+  let count = 0;
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await fetch(
-        "https://realestate-server-cyan.vercel.app/props",
-        {
+      let response = [];
+      if (flag) {
+        response = await fetch(`${import.meta.env.VITE_URL}iprops`, {
           method: "post",
           body: JSON.stringify({
-            url: `${decodeData}${pageNumber}`,
+            url: `${
+              import.meta.env.VITE_IDEALISTA_URL
+            }${decodeData}pagina-${pageNumber}.htm`,
           }),
           headers: { "Content-Type": "application/json" },
-        }
-      );
+        });
+      } else {
+        response = await fetch(`${import.meta.env.VITE_URL}props`, {
+          method: "post",
+          body: JSON.stringify({
+            url: `${decodeData}${import.meta.env.VITE_FILTER_URL}${pageNumber}`,
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+      }
       if (!response.ok) {
         throw new Error("Unable to Fetch Data");
       }
-      const totalData = await response.json();
-      console.log(totalData);
+      let totalData = await response.json();
+      // let totalData = {data:[]};
+      console.log("data", totalData.data);
+      console.log("count", count);
+      if (totalData.data.length === 0 && count < 2) {
+        console.log("sending Request...");
+        // setCount((prev) => prev + 1);
+        count++;
+        fetchData();
+        return;
+      }
       setProperties(totalData.data);
     } catch (error) {
       setIsError(error.message);
     }
     setIsLoading(false);
-  }, [decodeData, pageNumber]);
+  }, [decodeData, flag, pageNumber, count]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // useEffect(()=>{
+  //   if()
+  // },[])
 
   const page = (pg, index) => {
     return (
@@ -115,32 +142,36 @@ const Properties = () => {
     <div>
       <div className="flex items-center justify-between">
         <Title title={`Properties listed in ${name.replace("/", "")}`} />
-        <div className="flex w-[100px] italic font-semibold text-sm mb-4">
-          ({`Page ${pageNumber}`})
-        </div>
+        <div className="flex w-[100px] italic font-semibold text-sm mb-4">{`Page ${pageNumber}`}</div>
       </div>
       <div className="mb-8 mt-2 h-[2px] bg-[#8062D6]" />
       {isLoading && <Loader />}
       {isError && !isLoading && (
         <div className="flex flex-col items-center justify-center text-xl my-40 font-semibold text-red-500">
-          <img className="w-20 my-4" src={errorImage} alt="error" />
           {isError}
+          <Refresh onClickHandler={fetchData} />
         </div>
       )}
       {!isLoading && !isError && (
         <>
           {(properties && properties.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {properties.map((pro, index) => (
-                <Card key={index} property={pro} />
-              ))}
+              {flag
+                ? properties.map((pro, index) => (
+                    <IdealistaCard key={index} property={pro} />
+                  ))
+                : properties.map((pro, index) => (
+                    <Card key={index} property={pro} />
+                  ))}
             </div>
           )) || (
             <div className="text-xl font-semibold text-[#8062D6] w-full h-[70vh] flex items-center justify-center align-middle">
               <span className="mx-auto">
-                {pageNumber > 1
-                  ? "You have reached the end of Result"
-                  : "No Data Found"}
+                {pageNumber > 1 && !flag ? (
+                  "You have reached the end of Result"
+                ) : (
+                  <Refresh onClickHandler={fetchData} />
+                )}
               </span>
             </div>
           )}

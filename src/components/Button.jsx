@@ -1,5 +1,3 @@
-import React from "react";
-
 const Button = (props) => {
   const typeBtnClasses =
     "w-auto cursor-pointer border border-black rounded-lg py-[10px] px-4 flex justify-center items-center";
