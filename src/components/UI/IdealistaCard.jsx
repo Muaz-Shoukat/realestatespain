@@ -1,18 +1,20 @@
 import { useState } from "react";
 import NoImage from "../../assets/No IMAGE.png";
 
-const IdealistaCard = ({ property }) => {
-  const [date,setDate] = useState('fecha de raspado');
+const IdealistaCard = ({ property, page }) => {
+  const [date, setDate] = useState("fecha de raspado");
 
   const setDateHandler = () => {
-    
-      const currentDate = new Date();
-      const lastWeek = new Date(currentDate);
-      lastWeek.setDate(currentDate.getDate() - 7); // Subtract 7 days to get the start of last week
-      const randomTime = lastWeek.getTime() + Math.random() * (currentDate.getTime() - lastWeek.getTime());
-      const randomDate = new Date(randomTime);    
-    setDate(randomDate.toLocaleDateString());
-  }
+    const subDate = Math.ceil(page/2)-1
+    const currentDate = new Date();
+
+    // Subtract 2 days
+    currentDate.setDate(currentDate.getDate() - subDate);
+  
+    // Format the date as a string (YYYY-MM-DD)
+    console.log("new date",currentDate.toLocaleDateString())
+    setDate(currentDate.toLocaleDateString())
+  };
   return (
     <div className="cursor-pointer">
       <div className="relative overflow-hidden w-full mb-6 rounded-md text-left bg-white shadow-xl">

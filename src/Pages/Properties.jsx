@@ -158,7 +158,11 @@ const Properties = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {flag
                 ? properties.map((pro, index) => (
-                    <IdealistaCard key={index} property={pro} />
+                    <IdealistaCard
+                      key={index}
+                      property={pro}
+                      page={pageNumber}
+                    />
                   ))
                 : properties.map((pro, index) => (
                     <Card key={index} property={pro} />
