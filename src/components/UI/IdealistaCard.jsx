@@ -1,19 +1,19 @@
-import { useState } from "react";
+// import { useState } from "react";
 import NoImage from "../../assets/No IMAGE.png";
 
 const IdealistaCard = ({ property, page }) => {
-  const [date, setDate] = useState("fecha de raspado");
+  // const [date, setDate] = useState("fecha de raspado");
 
   const setDateHandler = () => {
-    const subDate = Math.ceil(page/2)-1
+    const subDate = Math.ceil(page / 2) - 1;
     const currentDate = new Date();
 
     // Subtract 2 days
     currentDate.setDate(currentDate.getDate() - subDate);
-  
+
     // Format the date as a string (YYYY-MM-DD)
-    console.log("new date",currentDate.toLocaleDateString())
-    setDate(currentDate.toLocaleDateString())
+    console.log("new date", currentDate.toLocaleDateString());
+    return currentDate.toLocaleDateString();
   };
   return (
     <div className="cursor-pointer">
@@ -43,12 +43,9 @@ const IdealistaCard = ({ property, page }) => {
             <div className="text-sm mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis ">
               {property.details}
             </div>
-            <a
-              onClick={setDateHandler}
-              className="my-2 flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer"
-            >
-              {date}
-            </a>
+            <div className="my-2 flex justify-center items-center py-2 px-4 bg-[#8062D6] text-sm md:text-lg font-semibold text-white rounded-md z-10 cursor-pointer">
+              {setDateHandler()}
+            </div>
             <a
               target="_blank"
               rel="noopener noreferrer"
